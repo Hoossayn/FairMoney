@@ -21,7 +21,7 @@ class MainViewModel @ViewModelInject constructor(private val userRepository: Use
 
     private fun fetchAllUsers() {
         viewModelScope.launch {
-            userRepository.fetchTrendingMovies().collect{
+            userRepository.fetchAllUsers().collect{
                 _usersList.value = it
             }
         }

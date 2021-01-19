@@ -19,9 +19,9 @@ class UserRepository @Inject constructor(
         private val userDao: UserDao
 ) {
 
-    suspend fun fetchTrendingMovies(): Flow<Resource<AllUsers>?> {
+    suspend fun fetchAllUsers(): Flow<Resource<AllUsers>?> {
         return flow {
-            emit(fetchTrendingMoviesCached())
+            emit(fetchAllUserCached())
             emit(Resource.loading())
             val result = dummyRemoteDataSource.fetchTrendingMovies()
 
@@ -36,7 +36,7 @@ class UserRepository @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
-    private fun fetchTrendingMoviesCached(): Resource<AllUsers>? =
+    private fun fetchAllUserCached(): Resource<AllUsers>? =
             userDao.getAllUsers()?.let {
                 Resource.success(AllUsers(it))
             }
@@ -46,10 +46,11 @@ class UserRepository @Inject constructor(
             Resource.success(userDao.getUserDetail(id))
         }
 
-    suspend fun fetchMovie(id: String): Flow<Resource<User>?> {
+    suspend fun fetchUserDetails(id: String): Flow<Resource<User>?> {
         return flow {
-            emit(Resource.loading())
             emit(fetchUserDetailCached(id))
+            emit(Resource.loading())
+
             val result =  dummyRemoteDataSource.fetchMovie(id)
             if (result.status == Resource.Status.SUCCESS) {
                 result.data?.let { it ->

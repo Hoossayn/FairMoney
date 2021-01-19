@@ -16,7 +16,7 @@ class DetailsViewModel @ViewModelInject constructor(private val userRepository: 
     private var _id = MutableLiveData<String>()
     private val _user: LiveData<Resource<User>?> = _id.distinctUntilChanged().switchMap {
         liveData {
-            userRepository.fetchMovie(it).onStart {
+            userRepository.fetchUserDetails(it).onStart {
                 emit(Resource.loading())
             }.collect {
                 emit(it)
